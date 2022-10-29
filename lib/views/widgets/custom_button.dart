@@ -20,14 +20,17 @@ class CustomButton extends StatelessWidget {
     return Container(
       height: 50.0,
       width: MediaQuery.of(context).size.width,
-      child: FlatButton(
+      child: TextButton(
         onPressed: onPressed,
-        color: color ?? Theme.of(context).accentColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.0),
-          ),
-        ),
+        style: TextButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+            textStyle: TextStyle(
+              color: color ?? Theme.of(context).accentColor,
+            )),
         child: Text(
           "$label",
           style: TextStyle(
