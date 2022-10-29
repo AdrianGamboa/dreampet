@@ -9,6 +9,7 @@ import 'package:social_app_ui/views/screens/main_screen.dart';
 import 'package:social_app_ui/views/widgets/custom_button.dart';
 import 'package:social_app_ui/views/widgets/custom_text_field.dart';
 import 'package:social_app_ui/util/extensions.dart';
+
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -38,8 +39,8 @@ class _LoginState extends State<Login> {
   }
 
   void showInSnackBar(String value) {
-    _scaffoldKey.currentState.removeCurrentSnackBar();
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(value)));
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
   }
 
   @override
@@ -111,7 +112,7 @@ class _LoginState extends State<Login> {
               SizedBox(height: 10.0),
               Align(
                 alignment: Alignment.centerRight,
-                child: FlatButton(
+                child: TextButton(
                   onPressed: () {
                     formMode = FormMode.FORGOT_PASSWORD;
                     setState(() {});
@@ -130,7 +131,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Don\'t have an account?'),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   formMode = FormMode.REGISTER;
                   setState(() {});
@@ -146,7 +147,7 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Already have an account?'),
-              FlatButton(
+              TextButton(
                 onPressed: () {
                   formMode = FormMode.LOGIN;
                   setState(() {});

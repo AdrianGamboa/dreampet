@@ -32,7 +32,7 @@ class _ConversationState extends State<Conversation> {
                 padding: EdgeInsets.only(left: 0.0, right: 10.0),
                 child: CircleAvatar(
                   backgroundImage: AssetImage(
-                    "assets/cm${random.nextInt(10)}.jpeg",
+                    "assets/images/cm${random.nextInt(10)}.jpeg",
                   ),
                 ),
               ),
@@ -85,7 +85,7 @@ class _ConversationState extends State<Conversation> {
                   return ChatBubble(
                     message: msg['type'] == "text"
                         ? messages[random.nextInt(10)]
-                        : "assets/cm${random.nextInt(10)}.jpeg",
+                        : "assets/images/cm${random.nextInt(10)}.jpeg",
                     username: msg["username"],
                     time: msg["time"],
                     type: msg['type'],
@@ -130,7 +130,8 @@ class _ConversationState extends State<Conversation> {
                             hintText: "Write your message...",
                             hintStyle: TextStyle(
                               fontSize: 15.0,
-                              color: Theme.of(context).textTheme.headline6.color,
+                              color:
+                                  Theme.of(context).textTheme.headline6.color,
                             ),
                           ),
                           maxLines: null,
