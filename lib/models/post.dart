@@ -7,12 +7,7 @@ class Post {
   final DateTime lastDate;
   final String userid;
 
-  Post(
-      {required this.id,
-      required this.image,
-      required this.descrition,
-      required this.lastDate,
-      required this.userid});
+  Post({this.id, this.image, this.descrition, this.lastDate, this.userid});
 
   Map<String, dynamic> toMap() {
     return {

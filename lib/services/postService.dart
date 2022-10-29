@@ -2,10 +2,10 @@ import 'package:mongo_dart/mongo_dart.dart';
 import '../database/mongodatabase.dart';
 import '../models/post.dart';
 
-class NoteDB {
+class PostDB {
   static Future<List<Map<String, dynamic>>> getDocuments() async {
     try {
-      final posts = await MongoDatabase.postsCollection.get().toList();
+      final posts = await MongoDatabase.postsCollection.find().toList();
       return posts;
     } catch (e) {
       return Future<List<Map<String, dynamic>>>.error(e);
