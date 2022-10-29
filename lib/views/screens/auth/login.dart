@@ -87,77 +87,78 @@ class _LoginState extends State<Login> {
   }
 
   buildFormContainer() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          '${Constants.appName}',
-          style: TextStyle(
-            fontSize: 40.0,
-            fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          MediaQuery.of(context).platformBrightness == Brightness.dark
+              ? Image.asset(
+                  '${Constants.logoWhite}',
+                )
+              : Image.asset(
+                  '${Constants.logoBlack}',
+                ).fadeInList(0, false),
+          Form(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            key: formKey,
+            child: buildForm(),
           ),
-        ).fadeInList(0, false),
-        SizedBox(height: 70.0),
-        Form(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          key: formKey,
-          child: buildForm(),
-        ),
-        Visibility(
-          visible: formMode == FormMode.LOGIN,
-          child: Column(
-            children: [
-              SizedBox(height: 10.0),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
+          Visibility(
+            visible: formMode == FormMode.LOGIN,
+            child: Column(
+              children: [
+                SizedBox(height: 10.0),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      formMode = FormMode.FORGOT_PASSWORD;
+                      setState(() {});
+                    },
+                    child: Text('Forgot Password?'),
+                  ),
+                ),
+              ],
+            ),
+          ).fadeInList(3, false),
+          SizedBox(height: 20.0),
+          buildButton(),
+          Visibility(
+            visible: formMode == FormMode.LOGIN,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Don\'t have an account?'),
+                TextButton(
                   onPressed: () {
-                    formMode = FormMode.FORGOT_PASSWORD;
+                    formMode = FormMode.REGISTER;
                     setState(() {});
                   },
-                  child: Text('Forgot Password?'),
+                  child: Text('Register'),
                 ),
-              ),
-            ],
+              ],
+            ),
+          ).fadeInList(5, false),
+          Visibility(
+            visible: formMode != FormMode.LOGIN,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Already have an account?'),
+                TextButton(
+                  onPressed: () {
+                    formMode = FormMode.LOGIN;
+                    setState(() {});
+                  },
+                  child: Text('Login'),
+                ),
+              ],
+            ),
           ),
-        ).fadeInList(3, false),
-        SizedBox(height: 20.0),
-        buildButton(),
-        Visibility(
-          visible: formMode == FormMode.LOGIN,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Don\'t have an account?'),
-              TextButton(
-                onPressed: () {
-                  formMode = FormMode.REGISTER;
-                  setState(() {});
-                },
-                child: Text('Register'),
-              ),
-            ],
-          ),
-        ).fadeInList(5, false),
-        Visibility(
-          visible: formMode != FormMode.LOGIN,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Already have an account?'),
-              TextButton(
-                onPressed: () {
-                  formMode = FormMode.LOGIN;
-                  setState(() {});
-                },
-                child: Text('Login'),
-              ),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -223,6 +224,9 @@ class _LoginState extends State<Login> {
     return loading
         ? Center(child: CircularProgressIndicator())
         : CustomButton(
+            color: MediaQuery.of(context).platformBrightness == Brightness.dark
+                ? Theme.of(context).primaryColor
+                : Colors.blue,
             label: "Submit",
             onPressed: () => login(),
           ).fadeInList(4, false);

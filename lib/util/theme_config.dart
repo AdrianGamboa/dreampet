@@ -11,6 +11,7 @@ class ThemeConfig {
   static Color badgeColor = Colors.red;
 
   static ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
     backgroundColor: lightBG,
     primaryColor: lightPrimary,
     accentColor: lightAccent,

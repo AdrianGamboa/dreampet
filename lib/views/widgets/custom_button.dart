@@ -23,18 +23,16 @@ class CustomButton extends StatelessWidget {
       child: TextButton(
         onPressed: onPressed,
         style: TextButton.styleFrom(
+            backgroundColor: color ?? Theme.of(context).primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
-            ),
-            textStyle: TextStyle(
-              color: color ?? Theme.of(context).accentColor,
             )),
         child: Text(
           "$label",
           style: TextStyle(
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
             fontSize: 18.0,
             color: Colors.white,
           ),
