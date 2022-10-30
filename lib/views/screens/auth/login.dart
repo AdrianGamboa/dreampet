@@ -9,6 +9,8 @@ import 'package:social_app_ui/views/screens/main_screen.dart';
 import 'package:social_app_ui/views/widgets/custom_button.dart';
 import 'package:social_app_ui/views/widgets/custom_text_field.dart';
 import 'package:social_app_ui/util/extensions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../../services/AuthenticationService.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -20,8 +22,10 @@ class _LoginState extends State<Login> {
   bool validate = false;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  String email, password, name = '';
+  AuthenticationService _auth = AuthenticationService();
+  String email, password, name = '', lastName = '';
   FocusNode nameFN = FocusNode();
+  FocusNode lastNameFN = FocusNode();
   FocusNode emailFN = FocusNode();
   FocusNode passFN = FocusNode();
   FormMode formMode = FormMode.LOGIN;
@@ -34,8 +38,36 @@ class _LoginState extends State<Login> {
       setState(() {});
       showInSnackBar('Please fix the errors in red before submitting.');
     } else {
-      Navigate.pushPageReplacement(context, MainScreen());
+      User user = await _auth.loginUser(context, email, password);
+      if (user != null) Navigate.pushPageReplacement(context, MainScreen());
     }
+  }
+
+  register() async {
+    FormState form = formKey.currentState;
+    form.save();
+    if (!form.validate()) {
+      validate = true;
+      setState(() {});
+      showInSnackBar('Please fix the errors in red before submitting.');
+    } else {
+      User user = await _auth.createNewUser(
+          name.trim(), lastName.trim(), email.trim(), password.trim(), context);
+
+      if (user != null) {
+        formMode = FormMode.LOGIN;
+        clearFields();
+        setState(() {});
+      }
+    }
+  }
+
+  clearFields() {
+    name = "";
+    lastName = "";
+    password = "";
+    email = "";
+    formKey.currentState.reset();
   }
 
   void showInSnackBar(String value) {
@@ -115,6 +147,7 @@ class _LoginState extends State<Login> {
                   child: TextButton(
                     onPressed: () {
                       formMode = FormMode.FORGOT_PASSWORD;
+                      clearFields();
                       setState(() {});
                     },
                     child: Text('Forgot Password?'),
@@ -134,6 +167,7 @@ class _LoginState extends State<Login> {
                 TextButton(
                   onPressed: () {
                     formMode = FormMode.REGISTER;
+                    clearFields();
                     setState(() {});
                   },
                   child: Text('Register'),
@@ -150,6 +184,7 @@ class _LoginState extends State<Login> {
                 TextButton(
                   onPressed: () {
                     formMode = FormMode.LOGIN;
+                    clearFields();
                     setState(() {});
                   },
                   child: Text('Login'),
@@ -179,6 +214,25 @@ class _LoginState extends State<Login> {
                   name = val;
                 },
                 focusNode: nameFN,
+                nextFocusNode: lastNameFN,
+              ),
+              SizedBox(height: 20.0),
+            ],
+          ),
+        ),
+        Visibility(
+          visible: formMode == FormMode.REGISTER,
+          child: Column(
+            children: [
+              CustomTextField(
+                enabled: !loading,
+                hintText: "LastName",
+                textInputAction: TextInputAction.next,
+                validateFunction: Validations.validateName,
+                onSaved: (String val) {
+                  lastName = val;
+                },
+                focusNode: lastNameFN,
                 nextFocusNode: emailFN,
               ),
               SizedBox(height: 20.0),
@@ -228,7 +282,7 @@ class _LoginState extends State<Login> {
                 ? Theme.of(context).primaryColor
                 : Colors.blue,
             label: "Submit",
-            onPressed: () => login(),
+            onPressed: () => register(),
           ).fadeInList(4, false);
   }
 }
