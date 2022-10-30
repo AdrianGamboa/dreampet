@@ -17,6 +17,7 @@ class _PostContentState extends State<PostContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
         title: Container(
             margin: EdgeInsets.only(top: 15, bottom: 10),
             child: MediaQuery.of(context).platformBrightness == Brightness.dark
@@ -136,25 +137,6 @@ class _PostContentState extends State<PostContent> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildCategory(String title) {
-    return Column(
-      children: <Widget>[
-        Text(
-          random.nextInt(10000).toString(),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          title,
-          style: TextStyle(),
-        ),
-      ],
     );
   }
 }

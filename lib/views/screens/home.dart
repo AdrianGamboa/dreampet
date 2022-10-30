@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:social_app_ui/views/widgets/post_item.dart';
-import 'package:social_app_ui/util/data.dart';
-
+import '../../services/adoptionPostService.dart';
+import '../../services/lostPostService.dart';
 import '../../util/const.dart';
 
 class Home extends StatefulWidget {
@@ -11,6 +13,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController _tabController;
+  List postsAdoptionList = [];
+  List postsLostList = [];
 
   @override
   void initState() {
@@ -54,10 +58,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           isScrollable: false,
           tabs: <Widget>[
             Tab(
-              text: "Adopción",
+              text: "Animales en adopción",
             ),
             Tab(
-              text: "Perdidos",
+              text: "Animales perdidos",
             ),
           ],
         ),
@@ -66,33 +70,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         controller: _tabController,
         children: <Widget>[
           //TAB 1 - Adopción
-          ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            itemCount: posts.length,
-            itemBuilder: (BuildContext context, int index) {
-              Map post = posts[index];
-              return PostItem(
-                img: post['img'],
-                name: post['name'],
-                dp: post['dp'],
-                time: post['time'],
-              );
-            },
-          ),
+          postFutureBuilder(AdoptionPostDB.getDocuments(), postsAdoptionList),
           //TAB 2 - Perdidos
-          ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            itemCount: posts.length,
-            itemBuilder: (BuildContext context, int index) {
-              Map post = posts[index];
-              return PostItem(
-                img: post['img'],
-                name: post['name'],
-                dp: post['dp'],
-                time: '12/12/22',
-              );
-            },
-          ),
+          postFutureBuilder(LostPostDB.getDocuments(), postsLostList),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -104,23 +84,42 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
     );
   }
-}
 
+  Widget postFutureBuilder(_future, list) => FutureBuilder(
+      future: _future,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show loading indicator
+          return Center(
+              child: Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: CircularProgressIndicator()));
+        } else {
+          if (snapshot.hasError) {
+            // Return error
+            return const Center(child: Text('Error al extraer la información'));
+          } else {
+            list = snapshot.data as List;
+            if (list.isEmpty) {
+              return const Center(child: Text('Sin información disponible'));
+            } else {
+              return buildPost(list);
+            }
+          }
+        }
+      });
 
-/*
-
-ListView.builder(
+  Widget buildPost(list) => ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 20),
-        itemCount: posts.length,
+        itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
-          Map post = posts[index];
           return PostItem(
-            img: post['img'],
-            name: post['name'],
-            dp: post['dp'],
-            time: post['time'],
+            img: "assets/images/cm8.jpeg",
+            name: list[index][1]['name'] + " " + list[index][1]['lastName'],
+            dp: "assets/images/cm${Random().nextInt(10)}.jpeg",
+            time: list[index][0]['publishedDate'],
+            description: list[index][0]['description'],
           );
         },
-      ),
-
-*/
+      );
+}

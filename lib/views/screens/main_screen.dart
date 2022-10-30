@@ -41,6 +41,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
         ),
         child: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(

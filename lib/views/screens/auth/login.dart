@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
     return AnimatedContainer(
       width: screenWidth < 700 ? 0 : screenWidth * 0.5,
       duration: Duration(milliseconds: 500),
-      color: Theme.of(context).accentColor.withOpacity(0.3),
+      color: Theme.of(context).primaryColor.withOpacity(0.3),
       child: Center(
         child: Lottie.asset(
           AppAnimations.chatAnimation,
@@ -120,6 +120,7 @@ class _LoginState extends State<Login> {
 
   buildFormContainer() {
     return SingleChildScrollView(
+      reverse: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -282,7 +283,7 @@ class _LoginState extends State<Login> {
                 ? Theme.of(context).primaryColor
                 : Colors.blue,
             label: "Submit",
-            onPressed: () => register(),
+            onPressed: () => formMode == FormMode.LOGIN ? login() : register(),
           ).fadeInList(4, false);
   }
 }
