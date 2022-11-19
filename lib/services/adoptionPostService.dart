@@ -6,7 +6,10 @@ class AdoptionPostDB {
   static getDocuments() async {
     try {
       var response = [];
-      final posts = await MongoDatabase.adoptionPostsCollection.find().toList();
+      final posts = await MongoDatabase.adoptionPostsCollection
+          .find(where.sortBy('publishedDate', descending: true))
+          .toList();
+      //Une el post con el usuario
       for (var item in posts) {
         final user = await MongoDatabase.usersCollection
             .findOne(where.eq("uid", item['userId']));
@@ -31,6 +34,7 @@ class AdoptionPostDB {
       var data =
           await MongoDatabase.adoptionPostsCollection.findOne({"_id": post.id});
       data["image"] = post.image;
+      data["title"] = post.title;
       data["description"] = post.description;
       data["lastDate"] = post.publishedDate;
 

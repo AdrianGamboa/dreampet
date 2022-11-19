@@ -8,6 +8,7 @@ class PostItem extends StatefulWidget {
   final String time;
   final String img;
   final String description;
+  final String title;
 
   PostItem({
     Key key,
@@ -16,6 +17,7 @@ class PostItem extends StatefulWidget {
     @required this.time,
     @required this.img,
     @required this.description,
+    @required this.title
   }) : super(key: key);
   @override
   _PostItemState createState() => _PostItemState();
@@ -36,12 +38,35 @@ class _PostItemState extends State<PostItem> {
                 ),
               ),
               contentPadding: EdgeInsets.all(0),
-              title: Text(
-                "${widget.name}",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17,
-                ),
+              title: Column(
+                children: [
+                  Row(children: [
+                    Flexible(
+                      child: Text(
+                        "${widget.name}",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                    )
+                  ]),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          "${widget.title}",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
               trailing: Text(
                 "${widget.time}",
@@ -58,10 +83,12 @@ class _PostItemState extends State<PostItem> {
               fit: BoxFit.cover,
             ),
             Container(
-              margin: EdgeInsets.only(top: 5),
-              alignment: Alignment.centerLeft,
+              margin: EdgeInsets.only(top: 5), 
+              alignment: Alignment.centerLeft,             
               child: Text(
                 "${widget.description}",
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontWeight: FontWeight.normal,
                   fontSize: 16,

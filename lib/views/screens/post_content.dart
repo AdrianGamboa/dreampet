@@ -17,6 +17,9 @@ class _PostContentState extends State<PostContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).textTheme.headline6.color
+        ),
         backgroundColor: Theme.of(context).primaryColor,
         title: Container(
             margin: EdgeInsets.only(top: 15, bottom: 10),
