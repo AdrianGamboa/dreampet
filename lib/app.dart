@@ -3,8 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:social_app_ui/util/const.dart';
 import 'package:social_app_ui/util/theme_config.dart';
 import 'package:social_app_ui/views/screens/auth/login.dart';
+import 'package:social_app_ui/views/screens/introduction_screen.dart';
 
 class MyApp extends StatelessWidget {
+  final bool showIntroduction;
+
+  const MyApp({Key key, this.showIntroduction}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: Constants.appName,
       theme: themeData(ThemeConfig.lightTheme),
       darkTheme: themeData(ThemeConfig.darkTheme),
-      home: Login(),
+      home: showIntroduction ? Login() : IntroductionScreenPage(intro: true)
     );
   }
 

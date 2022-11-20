@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:mongo_dart/mongo_dart.dart' as m;
-//import 'package:utility_plus/src/database/note_db.dart';
-//import 'package:utility_plus/src/models/note.dart';
 import '../../models/post.dart';
 import '../../services/adoptionPostService.dart';
 import '../../services/lostPostService.dart';
