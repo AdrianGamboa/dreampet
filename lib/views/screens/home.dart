@@ -33,7 +33,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Container(
-            margin: EdgeInsets.only(top: 15, bottom: 10),
+            margin: EdgeInsets.only(top: 20, bottom: 10),
             child: MediaQuery.of(context).platformBrightness == Brightness.dark
                 ? Image.asset(
                     '${Constants.logoWhite}',
@@ -44,14 +44,6 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     height: 120,
                   )),
         centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.filter_list,
-            ),
-            onPressed: () {},
-          ),
-        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.blue,

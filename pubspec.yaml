@@ -29,6 +29,9 @@ dependencies:
   lottie: ^1.4.3
   intl: ^0.17.0
   image_picker: ^0.8.6
+  introduction_screen: ^3.0.1
+  dots_indicator: ^2.1.0
+  shared_preferences: ^2.0.15
   flutter_native_splash: ^2.2.15
 
 flutter_native_splash:
@@ -36,6 +39,7 @@ flutter_native_splash:
   color: "#FFFFFF"
   image_dark: assets/images/logos/DreampetWhite.png
   color_dark: "#1F1F1F"
+
 
 dev_dependencies:
   flutter_test:
