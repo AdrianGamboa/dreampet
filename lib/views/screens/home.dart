@@ -1,10 +1,11 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:social_app_ui/views/screens/create_post.dart';
 import 'package:social_app_ui/views/widgets/post_item.dart';
 import '../../services/adoptionPostService.dart';
 import '../../services/lostPostService.dart';
 import '../../util/const.dart';
+import 'package:intl/intl.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -12,9 +13,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final descriptionTextController = TextEditingController();
   TabController _tabController;
   List postsAdoptionList = [];
   List postsLostList = [];
+  bool update = false;
+  int tabIndx = 0;
 
   @override
   void initState() {
@@ -70,9 +75,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         controller: _tabController,
         children: <Widget>[
           //TAB 1 - Adopción
-          postFutureBuilder(AdoptionPostDB.getDocuments(), postsAdoptionList),
+          postFutureBuilder(AdoptionPostDB.getDocuments(), postsAdoptionList, 0),
           //TAB 2 - Perdidos
-          postFutureBuilder(LostPostDB.getDocuments(), postsLostList),
+          postFutureBuilder(LostPostDB.getDocuments(), postsLostList, 1),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -80,14 +85,23 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           Icons.add,
           color: Colors.white,
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context, rootNavigator: true).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) {
+                return CreatePost(postType: tabIndx);
+              },
+            ),
+          ).then((value) => setState(() {}));
+        },
       ),
     );
   }
 
-  Widget postFutureBuilder(_future, list) => FutureBuilder(
+  Widget postFutureBuilder(_future, list, indx) => FutureBuilder(
       future: _future,
       builder: (context, snapshot) {
+        tabIndx = indx;
         if (snapshot.connectionState == ConnectionState.waiting) {
           // Show loading indicator
           return Center(
@@ -117,8 +131,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             img: "assets/images/cm8.jpeg",
             name: list[index][1]['name'] + " " + list[index][1]['lastName'],
             dp: "assets/images/cm${Random().nextInt(10)}.jpeg",
-            time: list[index][0]['publishedDate'],
+            time: DateFormat.yMMMd()
+                .format(list[index][0]['publishedDate'].toLocal()),
             description: list[index][0]['description'],
+            title: list[index][0]['title'],
           );
         },
       );
