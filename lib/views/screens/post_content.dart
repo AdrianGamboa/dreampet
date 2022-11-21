@@ -2,10 +2,30 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:social_app_ui/util/data.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import 'dart:io' show Platform;
 
 import '../../util/const.dart';
 
 class PostContent extends StatefulWidget {
+  final String profileImg;
+  final String name;
+  final String time;
+  final String img;
+  final String description;
+  final String title;
+
+  PostContent(
+      {Key key,
+      /*@required*/ this.profileImg,
+      /*@required*/ this.name,
+      /*@required*/ this.time,
+      /*@required*/ this.img,
+      /*@required*/ this.description,
+      /*@required*/ this.title})
+      : super(key: key);
+
   @override
   _PostContentState createState() => _PostContentState();
 }
@@ -17,9 +37,8 @@ class _PostContentState extends State<PostContent> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Theme.of(context).textTheme.headline6.color
-        ),
+        iconTheme:
+            IconThemeData(color: Theme.of(context).textTheme.headline6.color),
         backgroundColor: Theme.of(context).primaryColor,
         title: Container(
             margin: EdgeInsets.only(top: 15, bottom: 10),
@@ -51,18 +70,21 @@ class _PostContentState extends State<PostContent> {
               ),
               SizedBox(height: 10),
               Text(
-                names[random.nextInt(10)],
+                widget.name,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 22,
                 ),
               ),
-              SizedBox(height: 3),
+              SizedBox(height: 5),
               Text(
-                "Status should be here",
-                style: TextStyle(),
+                widget.title,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 10),
+              Text('Contacto: '+'+50686949588'),
+              SizedBox(height: 10),
               Row(
                 //Contact info
                 mainAxisSize: MainAxisSize.min,
@@ -82,7 +104,9 @@ class _PostContentState extends State<PostContent> {
                       style: TextStyle(
                           fontWeight: FontWeight.normal, color: Colors.white),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      phoneCall('+50686949588');
+                    },
                   ),
                   SizedBox(width: 10),
                   ElevatedButton.icon(
@@ -100,7 +124,9 @@ class _PostContentState extends State<PostContent> {
                       style: TextStyle(
                           fontWeight: FontWeight.normal, color: Colors.white),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      openWhatsapp('+50686949588');
+                    },
                   ),
                 ],
               ),
@@ -108,7 +134,7 @@ class _PostContentState extends State<PostContent> {
               Padding(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Text(
-                    "Hola, soy tobi, no tengo un hogar aún, si me quieres adoptar contacte con nostrosos.",
+                    widget.description,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
@@ -121,9 +147,9 @@ class _PostContentState extends State<PostContent> {
                 physics: NeverScrollableScrollPhysics(),
                 primary: false,
                 padding: EdgeInsets.all(5),
-                itemCount: 9,
+                itemCount: 8,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
+                  crossAxisCount: 2,
                   childAspectRatio: 200 / 200,
                 ),
                 itemBuilder: (BuildContext context, int index) {
@@ -141,5 +167,37 @@ class _PostContentState extends State<PostContent> {
         ),
       ),
     );
+  }
+
+  void showInSnackBar(String value) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(value)));
+  }
+
+  openWhatsapp(num) async {
+    if (Platform.isIOS) {
+      var whatsUrl = "https://wa.me/$num?text=${Uri.parse("¡Hola!")}";
+      if (await canLaunchUrlString(whatsUrl)) {
+        await launchUrlString(whatsUrl);
+      } else {
+        showInSnackBar('Problema al abrir WhatsApp.');
+      }
+    } else {
+      var whatsUrl = "whatsapp://send?phone=" + num + "&text=¡Hola!";
+      if (await canLaunchUrlString(whatsUrl)) {
+        await launchUrlString(whatsUrl);
+      } else {
+        showInSnackBar('Problema al abrir WhatsApp.');
+      }
+    }
+  }
+
+  phoneCall(num) async {
+    var phoneUrl = Uri(scheme: 'tel', path: num);
+    if (await canLaunchUrl(phoneUrl)) {
+      await launchUrl(phoneUrl);
+    } else {
+      showInSnackBar('Problema al abrir llamar.');
+    }
   }
 }

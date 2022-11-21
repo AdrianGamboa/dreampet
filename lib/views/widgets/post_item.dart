@@ -101,7 +101,7 @@ class _PostItemState extends State<PostItem> {
           Navigator.of(context, rootNavigator: true).push(
             MaterialPageRoute(
               builder: (BuildContext context) {
-                return PostContent();
+                return PostContent(name: widget.name, title: widget.title, description: widget.description);
               },
             ),
           );
