@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:social_app_ui/util/data.dart';
+import '../../util/const.dart';
+import 'introduction_screen.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -14,6 +16,32 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Container(
+            margin: EdgeInsets.only(top: 15, bottom: 10),
+            child: MediaQuery.of(context).platformBrightness == Brightness.dark
+                ? Image.asset(
+                    '${Constants.logoWhite}',
+                    height: 120,
+                  )
+                : Image.asset(
+                    '${Constants.logoBlack}',
+                    height: 120,
+                  )),
+        centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.help,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => IntroductionScreenPage(intro: false)));
+            },
+          ),
+        ],
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 10),
         child: Container(

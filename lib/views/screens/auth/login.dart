@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
     if (!form.validate()) {
       validate = true;
       setState(() {});
-      showInSnackBar('Please fix the errors in red before submitting.');
+      showInSnackBar('Por favor solucione los errores.');
     } else {
       User user = await _auth.loginUser(context, email, password);
       if (user != null) Navigate.pushPageReplacement(context, MainScreen());
@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
     if (!form.validate()) {
       validate = true;
       setState(() {});
-      showInSnackBar('Please fix the errors in red before submitting.');
+      showInSnackBar('Por favor solucione los errores.');
     } else {
       User user = await _auth.createNewUser(
           name.trim(), lastName.trim(), email.trim(), password.trim(), context);
@@ -151,7 +151,7 @@ class _LoginState extends State<Login> {
                       clearFields();
                       setState(() {});
                     },
-                    child: Text('Forgot Password?'),
+                    child: Text('¿Olvidó la contraseña?'),
                   ),
                 ),
               ],
@@ -164,14 +164,14 @@ class _LoginState extends State<Login> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Don\'t have an account?'),
+                Text('¿No tiene una cuenta?'),
                 TextButton(
                   onPressed: () {
                     formMode = FormMode.REGISTER;
                     clearFields();
                     setState(() {});
                   },
-                  child: Text('Register'),
+                  child: Text('Registrarse'),
                 ),
               ],
             ),
@@ -181,14 +181,14 @@ class _LoginState extends State<Login> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Already have an account?'),
+                Text('¿Ya tiene una cuenta?'),
                 TextButton(
                   onPressed: () {
                     formMode = FormMode.LOGIN;
                     clearFields();
                     setState(() {});
                   },
-                  child: Text('Login'),
+                  child: Text('Iniciar sesión'),
                 ),
               ],
             ),
@@ -208,7 +208,7 @@ class _LoginState extends State<Login> {
             children: [
               CustomTextField(
                 enabled: !loading,
-                hintText: "Name",
+                hintText: "Nombre",
                 textInputAction: TextInputAction.next,
                 validateFunction: Validations.validateName,
                 onSaved: (String val) {
@@ -227,7 +227,7 @@ class _LoginState extends State<Login> {
             children: [
               CustomTextField(
                 enabled: !loading,
-                hintText: "LastName",
+                hintText: "Apellidos",
                 textInputAction: TextInputAction.next,
                 validateFunction: Validations.validateName,
                 onSaved: (String val) {
@@ -242,7 +242,7 @@ class _LoginState extends State<Login> {
         ),
         CustomTextField(
           enabled: !loading,
-          hintText: "Email",
+          hintText: "Correo electrónico",
           textInputAction: TextInputAction.next,
           validateFunction: Validations.validateEmail,
           onSaved: (String val) {
@@ -258,7 +258,7 @@ class _LoginState extends State<Login> {
               SizedBox(height: 20.0),
               CustomTextField(
                 enabled: !loading,
-                hintText: "Password",
+                hintText: "Contraseña",
                 textInputAction: TextInputAction.done,
                 validateFunction: Validations.validatePassword,
                 submitAction: login,
@@ -282,7 +282,7 @@ class _LoginState extends State<Login> {
             color: MediaQuery.of(context).platformBrightness == Brightness.dark
                 ? Theme.of(context).primaryColor
                 : Colors.blue,
-            label: "Submit",
+            label: formMode == FormMode.LOGIN ? "Iniciar sesión" : "Registrarse",
             onPressed: () => formMode == FormMode.LOGIN ? login() : register(),
           ).fadeInList(4, false);
   }
