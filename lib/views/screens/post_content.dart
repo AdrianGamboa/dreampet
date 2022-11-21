@@ -71,9 +71,9 @@ class _PostContentState extends State<PostContent> {
                       value: 1,
                       child: Row(
                         children: [
-                          Icon(Icons.edit),
+                          Icon(Icons.edit, color: Theme.of(context).textTheme.headline6.color),
                           SizedBox(width: 10),
-                          Text("Editar")
+                          Text("Editar", style: TextStyle(color: Theme.of(context).textTheme.headline6.color))
                         ],
                       ),
                     ),
@@ -82,14 +82,14 @@ class _PostContentState extends State<PostContent> {
                       value: 2,
                       child: Row(
                         children: [
-                          Icon(Icons.delete),
+                          Icon(Icons.delete,color: Theme.of(context).textTheme.headline6.color),
                           SizedBox(width: 10),
-                          Text("Eliminar")
+                          Text("Eliminar", style: TextStyle(color: Theme.of(context).textTheme.headline6.color),)
                         ],
                       ),
                     ),
                   ],
-                  color: Colors.grey,
+                  color: Theme.of(context).primaryColor,
                   elevation: 2,
                   onSelected: (value) async {
                     if (value == 1) {
