@@ -2,7 +2,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 class Post {
   final ObjectId id;
-  final List<String> images;
+  final List<dynamic> images;
   final String title;
   final String description;
   final DateTime publishedDate;
