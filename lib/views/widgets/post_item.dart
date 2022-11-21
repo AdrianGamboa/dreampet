@@ -9,6 +9,7 @@ class PostItem extends StatefulWidget {
   final List<String> images;
   final String description;
   final String title;
+  final String phone;
 
   PostItem(
       {Key key,
@@ -17,6 +18,7 @@ class PostItem extends StatefulWidget {
       @required this.time,
       @required this.images,
       @required this.description,
+      @required this.phone,
       @required this.title})
       : super(key: key);
   @override
@@ -105,6 +107,7 @@ class _PostItemState extends State<PostItem> {
                     name: widget.name,
                     images: widget.images,
                     title: widget.title,
+                    phone: widget.phone,
                     description: widget.description);
               },
             ),

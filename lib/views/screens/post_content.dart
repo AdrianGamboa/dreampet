@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:social_app_ui/util/data.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:io' show File, Platform;
@@ -12,19 +9,19 @@ import '../../util/view_image_handler.dart';
 class PostContent extends StatefulWidget {
   final String profileImg;
   final String name;
-  final String time;
   final List<String> images;
   final String description;
   final String title;
+  final String phone;
 
   PostContent(
       {Key key,
-      /*@required*/ this.profileImg,
-      /*@required*/ this.name,
-      /*@required*/ this.time,
-      /*@required*/ this.images,
-      /*@required*/ this.description,
-      /*@required*/ this.title})
+      this.profileImg,
+      @required this.name,
+      @required this.images,
+      @required this.description,
+      @required this.phone,
+      @required this.title})
       : super(key: key);
 
   @override
@@ -32,7 +29,6 @@ class PostContent extends StatefulWidget {
 }
 
 class _PostContentState extends State<PostContent> {
-  static Random random = Random();
   List<Image> _postImages = [];
 
   @override
@@ -72,7 +68,7 @@ class _PostContentState extends State<PostContent> {
               SizedBox(height: 60),
               CircleAvatar(
                 backgroundImage: AssetImage(
-                  "assets/images/cm${random.nextInt(10)}.jpeg",
+                  "assets/images/profile.jpeg",
                 ),
                 radius: 50,
               ),
@@ -91,7 +87,7 @@ class _PostContentState extends State<PostContent> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 10),
-              Text('Contacto: ' + '+50686949588'),
+              Text('Contacto: ' + widget.phone),
               SizedBox(height: 10),
               Row(
                 //Contact info
@@ -113,7 +109,7 @@ class _PostContentState extends State<PostContent> {
                           fontWeight: FontWeight.normal, color: Colors.white),
                     ),
                     onPressed: () {
-                      phoneCall('+50686949588');
+                      phoneCall(widget.phone);
                     },
                   ),
                   SizedBox(width: 10),
@@ -133,7 +129,7 @@ class _PostContentState extends State<PostContent> {
                           fontWeight: FontWeight.normal, color: Colors.white),
                     ),
                     onPressed: () {
-                      openWhatsapp('+50686949588');
+                      openWhatsapp(widget.phone);
                     },
                   ),
                 ],
@@ -150,26 +146,6 @@ class _PostContentState extends State<PostContent> {
                     ),
                   )),
               SizedBox(height: 20),
-              // GridView.builder(
-              //   shrinkWrap: true,
-              //   physics: NeverScrollableScrollPhysics(),
-              //   primary: false,
-              //   padding: EdgeInsets.all(5),
-              //   itemCount: 8,
-              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: 2,
-              //     childAspectRatio: 200 / 200,
-              //   ),
-              //   itemBuilder: (BuildContext context, int index) {
-              //     return Padding(
-              //       padding: EdgeInsets.all(5.0),
-              //       child: Image.asset(
-              //         "assets/images/cm8.jpeg",
-              //         fit: BoxFit.cover,
-              //       ),
-              //     );
-              //   },
-              // ),
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),

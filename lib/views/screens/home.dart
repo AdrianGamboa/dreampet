@@ -127,6 +127,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
             time: DateFormat.yMMMd()
                 .format(list[index][0]['publishedDate'].toLocal()),
             description: list[index][0]['description'],
+            phone: list[index][1]['phone'],
             title: list[index][0]['title'],
           );
         },
