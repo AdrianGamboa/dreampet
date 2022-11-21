@@ -40,180 +40,199 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Theme.of(context).textTheme.headline6.color,
-        ),
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Container(
-            margin: EdgeInsets.only(top: 15, bottom: 10),
-            child: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? Image.asset(
-                    '${Constants.logoWhite}',
-                    height: 120,
-                  )
-                : Image.asset(
-                    '${Constants.logoBlack}',
-                    height: 120,
-                  )),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: () {
-              //Publicar post
-              insertPost();
-            },
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _loadindicador ? LinearProgressIndicator() : Container(height: 4),
-              TextField(
-                controller: _titleField,
-                decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).textTheme.headline6.color,
-                        width: 1.0,
-                      ),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).textTheme.headline6.color,
-                      ),
-                    ),
-                    border: InputBorder.none,
-                    hintText: 'Título',
-                    hintStyle: TextStyle(
-                        color: Theme.of(context).textTheme.headline6.color)),
-                style: TextStyle(
-                    color: Theme.of(context).textTheme.headline6.color,
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold),
+    return WillPopScope(
+      onWillPop: () async => !_loadindicador,
+      child: IgnorePointer(
+        ignoring: _loadindicador,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
+            appBar: AppBar(
+              iconTheme: IconThemeData(
+                color: Theme.of(context).textTheme.headline6.color,
               ),
-              SizedBox(
-                height: 150,
-                child: TextField(
-                    controller: _contentField,
-                    decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
+              backgroundColor: Theme.of(context).primaryColor,
+              title: Container(
+                  margin: EdgeInsets.only(top: 15, bottom: 10),
+                  child: MediaQuery.of(context).platformBrightness ==
+                          Brightness.dark
+                      ? Image.asset(
+                          '${Constants.logoWhite}',
+                          height: 120,
+                        )
+                      : Image.asset(
+                          '${Constants.logoBlack}',
+                          height: 120,
+                        )),
+              centerTitle: true,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.check),
+                  onPressed: () {
+                    //Publicar post
+                    insertPost();
+                  },
+                )
+              ],
+            ),
+            body: SingleChildScrollView(
+              padding: EdgeInsets.all(16),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _loadindicador
+                        ? LinearProgressIndicator()
+                        : Container(height: 4),
+                    TextField(
+                      controller: _titleField,
+                      decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color:
+                                  Theme.of(context).textTheme.headline6.color,
+                              width: 1.0,
+                            ),
                           ),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                          ),
-                        ),
-                        border: InputBorder.none,
-                        hintText: 'Contenido',
-                        hintStyle: TextStyle(
-                            color:
-                                Theme.of(context).textTheme.headline6.color)),
-                    style: TextStyle(
-                      color: Theme.of(context).textTheme.headline6.color,
-                    ),
-                    minLines: null,
-                    maxLines: null,
-                    keyboardType: TextInputType.multiline),
-              ),
-              Divider(
-                thickness: 1,
-              ),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                primary: false,
-                padding: EdgeInsets.all(5),
-                itemCount: _postImages.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 200 / 200,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.all(1.0),
-                    child: Stack(fit: StackFit.expand, children: <Widget>[
-                      ImageFullScreenWrapperWidget(
-                        dark: true,
-                        child: Image.file(
-                          _postImages[index],
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Positioned(
-                        right: -6,
-                        top: -6,
-                        child: CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Colors.black.withOpacity(0.5),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.delete,
-                              size: 18,
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
                               color:
                                   Theme.of(context).textTheme.headline6.color,
                             ),
-                            onPressed: () {
-                              setState(() {
-                                _postImages.removeAt(index);
-                              });
-                            },
                           ),
-                        ),
-                      )
-                    ]),
-                  );
-                },
+                          border: InputBorder.none,
+                          hintText: 'Título',
+                          hintStyle: TextStyle(
+                              color:
+                                  Theme.of(context).textTheme.headline6.color)),
+                      style: TextStyle(
+                          color: Theme.of(context).textTheme.headline6.color,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 150,
+                      child: TextField(
+                          controller: _contentField,
+                          decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                ),
+                              ),
+                              border: InputBorder.none,
+                              hintText: 'Contenido',
+                              hintStyle: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .color)),
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.headline6.color,
+                          ),
+                          minLines: null,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline),
+                    ),
+                    Divider(
+                      thickness: 1,
+                    ),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      primary: false,
+                      padding: EdgeInsets.all(5),
+                      itemCount: _postImages.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 200 / 200,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Padding(
+                          padding: EdgeInsets.all(1.0),
+                          child: Stack(fit: StackFit.expand, children: <Widget>[
+                            ImageFullScreenWrapperWidget(
+                              dark: true,
+                              child: Image.file(
+                                _postImages[index],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Positioned(
+                              right: -6,
+                              top: -6,
+                              child: CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Colors.black.withOpacity(0.5),
+                                child: IconButton(
+                                  icon: Icon(
+                                    Icons.delete,
+                                    size: 18,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .headline6
+                                        .color,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _postImages.removeAt(index);
+                                    });
+                                  },
+                                ),
+                              ),
+                            )
+                          ]),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ],
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Divider(
+                    thickness: 1,
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.photo_size_select_actual_outlined,
+                          color: Theme.of(context).textTheme.headline6.color,
+                        ),
+                        onPressed: () {
+                          // do something
+                          _getFromGallery();
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.camera_alt_outlined,
+                          color: Theme.of(context).textTheme.headline6.color,
+                        ),
+                        onPressed: () {
+                          // do something
+                          _getFromCamera();
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Divider(
-              thickness: 1,
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.photo_size_select_actual_outlined,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
-                  onPressed: () {
-                    // do something
-                    _getFromGallery();
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.camera_alt_outlined,
-                    color: Theme.of(context).textTheme.headline6.color,
-                  ),
-                  onPressed: () {
-                    // do something
-                    _getFromCamera();
-                  },
-                ),
-              ],
-            ),
-          ],
         ),
       ),
     );
@@ -249,12 +268,12 @@ class _CreatePostState extends State<CreatePost> {
     if (_postImages.isNotEmpty) {
       try {
         if (await hasNetwork()) {
-          // Upload file and metadata to the path 'images/mountains.jpg'
-          final uploadTask =
-              FirebaseStorage.instance.ref().child('images/$pathName');
           List<String> data = [];
-          for (var element in _postImages) {
-            await uploadTask.putFile(element);
+          for (var i = 0; i < _postImages.length; i++) {
+            // Upload file and metadata to the path 'images/{id}/{index}.jpg'
+            final uploadTask =
+                FirebaseStorage.instance.ref().child('images/$pathName/$i');
+            await uploadTask.putFile(_postImages[i]);
             String url = await uploadTask.getDownloadURL();
             data.add(url);
           }
@@ -295,12 +314,9 @@ class _CreatePostState extends State<CreatePost> {
             publishedDate: DateTime.now(),
             userId: FirebaseAuth.instance.currentUser.uid);
 
-        print(widget.postType);
         if (widget.postType == 0) {
-          print('post adoption');
           await AdoptionPostDB.insert(post);
         } else if (widget.postType == 1) {
-          print('post lost pet');
           await LostPostDB.insert(post);
         }
         Navigator.of(context).pop();
