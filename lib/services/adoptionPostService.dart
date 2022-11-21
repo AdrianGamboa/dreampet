@@ -33,7 +33,7 @@ class AdoptionPostDB {
     try {
       var data =
           await MongoDatabase.adoptionPostsCollection.findOne({"_id": post.id});
-      data["image"] = post.image;
+      data["images"] = post.images;
       data["title"] = post.title;
       data["description"] = post.description;
       data["lastDate"] = post.publishedDate;

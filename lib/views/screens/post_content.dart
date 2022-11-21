@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:social_app_ui/util/data.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'dart:io' show Platform;
+import 'dart:io' show File, Platform;
 
 import '../../util/const.dart';
+import '../../util/view_image_handler.dart';
 
 class PostContent extends StatefulWidget {
   final String profileImg;
   final String name;
   final String time;
-  final String img;
+  final List<String> images;
   final String description;
   final String title;
 
@@ -21,7 +22,7 @@ class PostContent extends StatefulWidget {
       /*@required*/ this.profileImg,
       /*@required*/ this.name,
       /*@required*/ this.time,
-      /*@required*/ this.img,
+      /*@required*/ this.images,
       /*@required*/ this.description,
       /*@required*/ this.title})
       : super(key: key);
@@ -32,6 +33,13 @@ class PostContent extends StatefulWidget {
 
 class _PostContentState extends State<PostContent> {
   static Random random = Random();
+  List<Image> _postImages = [];
+
+  @override
+  void initState() {
+    _loadImages(widget.images);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +91,7 @@ class _PostContentState extends State<PostContent> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 10),
-              Text('Contacto: '+'+50686949588'),
+              Text('Contacto: ' + '+50686949588'),
               SizedBox(height: 10),
               Row(
                 //Contact info
@@ -142,22 +150,42 @@ class _PostContentState extends State<PostContent> {
                     ),
                   )),
               SizedBox(height: 20),
+              // GridView.builder(
+              //   shrinkWrap: true,
+              //   physics: NeverScrollableScrollPhysics(),
+              //   primary: false,
+              //   padding: EdgeInsets.all(5),
+              //   itemCount: 8,
+              //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //     crossAxisCount: 2,
+              //     childAspectRatio: 200 / 200,
+              //   ),
+              //   itemBuilder: (BuildContext context, int index) {
+              //     return Padding(
+              //       padding: EdgeInsets.all(5.0),
+              //       child: Image.asset(
+              //         "assets/images/cm8.jpeg",
+              //         fit: BoxFit.cover,
+              //       ),
+              //     );
+              //   },
+              // ),
               GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 primary: false,
                 padding: EdgeInsets.all(5),
-                itemCount: 8,
+                itemCount: widget.images.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 200 / 200,
                 ),
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Image.asset(
-                      "assets/images/cm8.jpeg",
-                      fit: BoxFit.cover,
+                    padding: EdgeInsets.all(1.0),
+                    child: ImageFullScreenWrapperWidget(
+                      dark: true,
+                      child: _postImages[index],
                     ),
                   );
                 },
@@ -167,6 +195,29 @@ class _PostContentState extends State<PostContent> {
         ),
       ),
     );
+  }
+
+  _loadImages(List<String> images) {
+    if (images != null) {
+      for (var i = 0; i < images.length; i++) {
+        _postImages.add(Image.network(
+          images[i],
+          fit: BoxFit.cover,
+          loadingBuilder: (BuildContext context, Widget child,
+              ImageChunkEvent loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes
+                    : null,
+              ),
+            );
+          },
+        ));
+      }
+    }
   }
 
   void showInSnackBar(String value) {

@@ -2,7 +2,7 @@ import 'package:mongo_dart/mongo_dart.dart';
 
 class Post {
   final ObjectId id;
-  final List<String> image;
+  final List<String> images;
   final String title;
   final String description;
   final DateTime publishedDate;
@@ -10,7 +10,7 @@ class Post {
 
   Post(
       {this.id,
-      this.image,
+      this.images,
       this.title,
       this.description,
       this.publishedDate,
@@ -19,7 +19,7 @@ class Post {
   Map<String, dynamic> toMap() {
     return {
       '_id': id,
-      'image': image,
+      'images': images,
       'title': title,
       'description': description,
       'publishedDate': publishedDate,
@@ -29,7 +29,7 @@ class Post {
 
   Post.fromMap(Map<String, dynamic> map)
       : id = map['_id'],
-        image = map['image'],
+        images = map['images'],
         title = map['title'],
         description = map['description'],
         publishedDate = map['publishedDate'],

@@ -6,19 +6,19 @@ class PostItem extends StatefulWidget {
   final String dp;
   final String name;
   final String time;
-  final String img;
+  final List<String> images;
   final String description;
   final String title;
 
-  PostItem({
-    Key key,
-    @required this.dp,
-    @required this.name,
-    @required this.time,
-    @required this.img,
-    @required this.description,
-    @required this.title
-  }) : super(key: key);
+  PostItem(
+      {Key key,
+      @required this.dp,
+      @required this.name,
+      @required this.time,
+      @required this.images,
+      @required this.description,
+      @required this.title})
+      : super(key: key);
   @override
   _PostItemState createState() => _PostItemState();
 }
@@ -76,15 +76,15 @@ class _PostItemState extends State<PostItem> {
                 ),
               ),
             ),
-            Image.asset(
-              "${widget.img}",
+            Image.network(
+              widget.images[0],
               height: 170,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
             ),
             Container(
-              margin: EdgeInsets.only(top: 5), 
-              alignment: Alignment.centerLeft,             
+              margin: EdgeInsets.only(top: 5),
+              alignment: Alignment.centerLeft,
               child: Text(
                 "${widget.description}",
                 maxLines: 2,
@@ -101,7 +101,11 @@ class _PostItemState extends State<PostItem> {
           Navigator.of(context, rootNavigator: true).push(
             MaterialPageRoute(
               builder: (BuildContext context) {
-                return PostContent(name: widget.name, title: widget.title, description: widget.description);
+                return PostContent(
+                    name: widget.name,
+                    images: widget.images,
+                    title: widget.title,
+                    description: widget.description);
               },
             ),
           );

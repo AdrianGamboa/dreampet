@@ -67,7 +67,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         controller: _tabController,
         children: <Widget>[
           //TAB 1 - Adopción
-          postFutureBuilder(AdoptionPostDB.getDocuments(), postsAdoptionList, 0),
+          postFutureBuilder(
+              AdoptionPostDB.getDocuments(), postsAdoptionList, 0),
           //TAB 2 - Perdidos
           postFutureBuilder(LostPostDB.getDocuments(), postsLostList, 1),
         ],
@@ -120,7 +121,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return PostItem(
-            img: "assets/images/cm8.jpeg",
+            images: list[index][0]['images'].cast<String>(),
             name: list[index][1]['name'] + " " + list[index][1]['lastName'],
             dp: "assets/images/cm${Random().nextInt(10)}.jpeg",
             time: DateFormat.yMMMd()
