@@ -23,10 +23,11 @@ class _LoginState extends State<Login> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   AuthenticationService _auth = AuthenticationService();
-  String email, password, name = '', lastName = '';
+  String email, phone, password, name = '', lastName = '';
   FocusNode nameFN = FocusNode();
   FocusNode lastNameFN = FocusNode();
   FocusNode emailFN = FocusNode();
+  FocusNode phoneFN = FocusNode();
   FocusNode passFN = FocusNode();
   FormMode formMode = FormMode.LOGIN;
 
@@ -52,7 +53,7 @@ class _LoginState extends State<Login> {
       showInSnackBar('Por favor solucione los errores.');
     } else {
       User user = await _auth.createNewUser(
-          name.trim(), lastName.trim(), email.trim(), password.trim(), context);
+          name.trim(), lastName.trim(), email.trim(), phone.trim(), password.trim(), context);
 
       if (user != null) {
         formMode = FormMode.LOGIN;
@@ -67,6 +68,7 @@ class _LoginState extends State<Login> {
     lastName = "";
     password = "";
     email = "";
+    phone = "";
     formKey.currentState.reset();
   }
 
@@ -249,13 +251,32 @@ class _LoginState extends State<Login> {
             email = val;
           },
           focusNode: emailFN,
-          nextFocusNode: passFN,
+          nextFocusNode: phoneFN,
         ).fadeInList(1, false),
+        SizedBox(height: 20.0),
+         Visibility(
+          visible: formMode == FormMode.REGISTER,
+          child: Column(
+            children: [
+              CustomTextField(
+                enabled: !loading,
+                hintText: "Número de teléfono",
+                textInputAction: TextInputAction.next,
+                validateFunction: Validations.validateNumber,
+                onSaved: (String val) {
+                  phone = val;
+                },
+                focusNode: phoneFN,
+                nextFocusNode: passFN,
+              ),
+              SizedBox(height: 20.0),
+            ],
+          ),
+        ),
         Visibility(
           visible: formMode != FormMode.FORGOT_PASSWORD,
           child: Column(
             children: [
-              SizedBox(height: 20.0),
               CustomTextField(
                 enabled: !loading,
                 hintText: "Contraseña",

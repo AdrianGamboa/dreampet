@@ -9,13 +9,13 @@ class AuthenticationService {
 
 // registration with email and password
 
-  Future createNewUser(String name, String lastName, String email,
+  Future createNewUser(String name, String lastName, String email, String phone,
       String password, BuildContext context) async {
     try {
       UserCredential credential = await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) {
-        UserDB.registerUser(name, lastName, email, value.user.uid.toString());
+        UserDB.registerUser(name, lastName, email, phone, value.user.uid.toString());
         return value;
       });
       User user = credential.user;

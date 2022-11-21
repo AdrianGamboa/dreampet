@@ -5,10 +5,10 @@ class User {
   final String name;
   final String lastName;
   final String email;
-
+  final String phone;
   final String uid;
 
-  User({this.id, this.name, this.lastName, this.email, this.uid});
+  User({this.id, this.name, this.lastName, this.email, this.phone, this.uid});
 
   Map<String, dynamic> toMap() {
     return {
@@ -16,6 +16,7 @@ class User {
       'name': name,
       'lastName': lastName,
       'email': email,
+      'phone': phone,
       'uid': uid,
     };
   }
@@ -25,5 +26,6 @@ class User {
         id = map['_id'],
         lastName = map['lastName'],
         email = map['email'],
+        phone = map['phone'],
         uid = map['uid'];
 }

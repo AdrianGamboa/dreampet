@@ -53,13 +53,14 @@ class UserDB {
     }
   }
 
-  static registerUser(name, lastName, email, uid) async {
+  static registerUser(name, lastName, email, phone, uid) async {
     try {
       final user = User(
           id: m.ObjectId(),
           name: name,
           lastName: lastName,
           email: email,
+          phone: phone,
           uid: uid);
       await insert(user);
     } catch (e) {
