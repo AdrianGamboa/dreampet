@@ -64,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: IconBadge(icon: Icons.notifications),
+              icon: Icon(Icons.pets),
               label: '',
             ),
             BottomNavigationBarItem(
