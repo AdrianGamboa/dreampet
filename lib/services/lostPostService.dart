@@ -33,7 +33,7 @@ class LostPostDB {
     try {
       var data =
           await MongoDatabase.lostPostsCollection.findOne({"_id": post.id});
-      data["image"] = post.image;
+      data["images"] = post.images;
       data["title"] = post.title;
       data["description"] = post.description;
       data["lastDate"] = post.publishedDate;

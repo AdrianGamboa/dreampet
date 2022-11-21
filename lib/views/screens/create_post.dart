@@ -308,7 +308,7 @@ class _CreatePostState extends State<CreatePost> {
 
         final post = Post(
             id: id,
-            image: await _uploadToFirebase(id.$oid),
+            images: await _uploadToFirebase(id.$oid),
             title: _titleField.text,
             description: _contentField.text,
             publishedDate: DateTime.now(),

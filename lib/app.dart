@@ -3,9 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:social_app_ui/util/const.dart';
 import 'package:social_app_ui/util/global.dart';
 import 'package:social_app_ui/util/theme_config.dart';
+import 'package:social_app_ui/views/screens/main_screen.dart';
 import 'package:social_app_ui/views/screens/auth/login.dart';
 import 'package:social_app_ui/views/screens/introduction_screen.dart';
-import 'package:social_app_ui/views/screens/main_screen.dart';
 
 class MyApp extends StatelessWidget {
   final bool showIntroduction;

@@ -33,6 +33,7 @@ dependencies:
   dots_indicator: ^2.1.0
   shared_preferences: ^2.0.15
   flutter_native_splash: ^2.2.15
+  url_launcher: ^6.1.6
 
 flutter_native_splash:
   image: assets/images/logos/DreampetBlack.png
