@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:social_app_ui/views/screens/chat/chats.dart';
 import 'package:social_app_ui/views/screens/home.dart';
+import 'package:social_app_ui/views/screens/notifications.dart';
 import 'package:social_app_ui/views/screens/profile.dart';
 
 class MainScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _MainScreenState extends State<MainScreen> {
         controller: _pageController,
         onPageChanged: onPageChanged,
         children: <Widget>[
-          Chats(),
+          Notifications(),
           Home(),
           Profile(),
         ],
