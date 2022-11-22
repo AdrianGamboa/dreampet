@@ -120,7 +120,7 @@ class _PostContentState extends State<PostContent> {
                     } else if (value == 2) {
                       if (widget.postType == 0) {
                         await AdoptionPostDB.delete(widget.post);
-                      } else if (widget.postType == 0) {
+                      } else if (widget.postType == 1) {
                         await LostPostDB.delete(widget.post);
                       }
                       Navigator.of(context).pop();
