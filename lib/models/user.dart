@@ -6,9 +6,17 @@ class User {
   final String lastName;
   final String email;
   final String phone;
+  final String avatarURL;
   final String uid;
 
-  User({this.id, this.name, this.lastName, this.email, this.phone, this.uid});
+  User(
+      {this.id,
+      this.name,
+      this.lastName,
+      this.email,
+      this.phone,
+      this.avatarURL,
+      this.uid});
 
   Map<String, dynamic> toMap() {
     return {
@@ -17,6 +25,7 @@ class User {
       'lastName': lastName,
       'email': email,
       'phone': phone,
+      'avatarURL': avatarURL,
       'uid': uid,
     };
   }
@@ -27,5 +36,6 @@ class User {
         lastName = map['lastName'],
         email = map['email'],
         phone = map['phone'],
+        avatarURL = map['avatarURL'],
         uid = map['uid'];
 }
