@@ -158,7 +158,7 @@ class _PostContentState extends State<PostContent> {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 10),
-              Text('Contacto: ' + widget.user.phone),
+              Text('Contacto: +506 ' + widget.user.phone),
               SizedBox(height: 10),
               Row(
                 //Contact info
@@ -274,14 +274,14 @@ class _PostContentState extends State<PostContent> {
 
   openWhatsapp(num) async {
     if (Platform.isIOS) {
-      var whatsUrl = "https://wa.me/$num?text=${Uri.parse("¡Hola!")}";
+      var whatsUrl = "https://wa.me/+506$num?text=${Uri.parse("¡Hola!")}";
       if (await canLaunchUrlString(whatsUrl)) {
         await launchUrlString(whatsUrl);
       } else {
         showInSnackBar('Problema al abrir WhatsApp.');
       }
     } else {
-      var whatsUrl = "whatsapp://send?phone=" + num + "&text=¡Hola!";
+      var whatsUrl = "whatsapp://send?phone=+506" + num + "&text=¡Hola!";
       if (await canLaunchUrlString(whatsUrl)) {
         await launchUrlString(whatsUrl);
       } else {
