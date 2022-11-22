@@ -147,7 +147,7 @@ class _PetsInfoState extends State<PetsInfo> {
                   SizedBox(
                     width: 20,
                   ),
-                  Text("Próxima vacuna: ",
+                  Text("Vacunas: ",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 ],
@@ -174,7 +174,7 @@ class _PetsInfoState extends State<PetsInfo> {
                   SizedBox(
                     width: 20,
                   ),
-                  Text("Próxima visita al veterinario: ",
+                  Text("Visita al veterinario: ",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                 ],
