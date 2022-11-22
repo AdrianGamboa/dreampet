@@ -133,7 +133,7 @@ class _VaccinesPetState extends State<VaccinesPet> {
           return Align(
             alignment: Alignment.centerRight,
             child: Container(
-              height: 0.5,
+              height: 25,
               width: MediaQuery.of(context).size.width / 1.3,
               child: Divider(
                 height: 3,
@@ -144,100 +144,96 @@ class _VaccinesPetState extends State<VaccinesPet> {
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           Map notif = list[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              contentPadding: EdgeInsets.all(8.0),
-              title: Container(
-                  child: Column(
+          return ListTile(                
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(width: 120, child: Text('Nombre: ')),
-                          SizedBox(width: 120, child: Text(notif['nombre'])),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(width: 120, child: Text("Fecha: ")),
-                          SizedBox(width: 120, child: Text(notif['fecha'])),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  )
-                ],
-              )),
-              subtitle: Container(
-                  child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(width: 120, child: Text('Descripción: ')),
-                          SizedBox(
-                              width: 120, child: Text(notif['descripcion'])),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(width: 120, child: Text("Lugar: ")),
-                          SizedBox(width: 120, child: Text(notif['lugar'])),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  )
-                ],
-              )),
-              trailing: Column(
-                children: [
-                  SizedBox(
-                    height: 35,
-                    child: IconButton(
-                      iconSize: 20,
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (BuildContext context) {
-                              return AddVaccinePage(
-                                petInfo: widget.petInfo,
-                                vaccineInfo: convertToVaccine(notif),
-                              );
-                            },
+                  Column(children: [
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 20),
+                          child: Column(
+                            children: [
+                              SizedBox(width: 120, child: Text('Nombre: ')),
+                              SizedBox(
+                                  width: 120, child: Text(notif['nombre'])),
+                            ],
                           ),
-                        ).then((value) {
-                          setState(() {});
-                        });
-                        ;
-                      },
-                      icon: Icon(
-                        Icons.edit,
-                      ),
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(width: 120, child: Text("Fecha: ")),
+                            SizedBox(width: 120, child: Text(notif['fecha'])),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(
-                    child: IconButton(
-                      onPressed: () {
-                        VaccineDB.delete(convertToVaccine(notif));
-                        setState(() {});
-                      },
-                      icon: Icon(
-                        Icons.delete,
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 20),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                  width: 120, child: Text('Descripción: ')),
+                              SizedBox(
+                                  width: 120,
+                                  child: Text(notif['descripcion'])),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(width: 120, child: Text("Lugar: ")),
+                            SizedBox(width: 120, child: Text(notif['lugar'])),
+                          ],
+                        )
+                      ],
+                    )
+                  ]),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: 35,
+                        child: IconButton(
+                          iconSize: 20,
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) {
+                                  return AddVaccinePage(
+                                    petInfo: widget.petInfo,
+                                    vaccineInfo: convertToVaccine(notif),
+                                  );
+                                },
+                              ),
+                            ).then((value) {
+                              setState(() {});
+                            });
+                          },
+                          icon: Icon(
+                            Icons.edit,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
+                      SizedBox(
+                        child: IconButton(
+                          onPressed: () {
+                            VaccineDB.delete(convertToVaccine(notif));
+                            setState(() {});
+                          },
+                          icon: Icon(
+                            Icons.delete,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),                  
                 ],
               ),
-            ),
-          );
+              trailing: SizedBox());
         },
       );
   Vaccine convertToVaccine(vaccine) {
