@@ -268,7 +268,6 @@ class IconPicker extends StatefulWidget {
     Icons.videogame_asset_rounded,
     Icons.weekend_rounded,
     Icons.whatshot,
-    Icons.wind_power,
     Icons.workspace_premium,
     Icons.yard,
     Icons.agriculture,

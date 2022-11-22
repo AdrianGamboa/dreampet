@@ -36,4 +36,12 @@ class petDB{
       return Future.error(e);
     }
   }
+
+  static delete(Pet pet) async {
+    try {
+      await MongoDatabase.petsCollection.remove(where.id(pet.id));
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
 }
