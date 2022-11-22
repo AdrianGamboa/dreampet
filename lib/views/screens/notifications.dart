@@ -19,6 +19,7 @@ class _NotificationsState extends State<Notifications> {
   refresh() {
     setState(() {});
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -110,7 +111,10 @@ class _NotificationsState extends State<Notifications> {
           } else {
             list = snapshot.data as List;
             if (list.isEmpty) {
-              return const Center(child: Text('Sin información disponible'));
+              return Center(
+                  child: Container(
+                      margin: EdgeInsets.only(top: 25),
+                      child: Text('Sin información disponible')));
             } else {
               return buildMyPetCard(list);
             }
@@ -147,7 +151,8 @@ class _NotificationsState extends State<Notifications> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (BuildContext context) {
-                      return PetsInfo(petInfo: convertToPet(notif),
+                      return PetsInfo(
+                        petInfo: convertToPet(notif),
                       );
                     },
                   ),
@@ -157,8 +162,8 @@ class _NotificationsState extends State<Notifications> {
           );
         },
       );
-        Pet convertToPet(pet_) {
-         return Pet(
+  Pet convertToPet(pet_) {
+    return Pet(
         id: pet_['_id'],
         nombre: pet_['nombre'],
         edad: pet_['edad'],
