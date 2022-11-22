@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:social_app_ui/util/data.dart';
+import 'package:social_app_ui/views/screens/veterinary_pet.dart';
 
 import '../../models/pet.dart';
 import '../../util/alerts.dart';
 import '../../util/const.dart';
 import 'add_pet.dart';
+import 'vaccine_pet.dart';
 
 class PetsInfo extends StatefulWidget {
   const PetsInfo({Key key, this.petInfo}) : super(key: key);
@@ -149,7 +151,14 @@ class _PetsInfoState extends State<PetsInfo> {
                 ],
               ),
             ),
-            TextButton(onPressed: () {}, child: Text("Ver registro completo")),
+            TextButton(onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return VaccinesPet(petInfo: widget.petInfo);
+                    },
+                  ),
+                );}, child: Text("Ver registro completo")),
             Container(
               margin: const EdgeInsets.only(top: 30.0),
               child: Row(
@@ -169,7 +178,15 @@ class _PetsInfoState extends State<PetsInfo> {
                 ],
               ),
             ),
-            TextButton(onPressed: () {}, child: Text("Ver registro completo"))
+            TextButton(onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return VeterinaryPet(petInfo: widget.petInfo);
+                    },
+                  ),
+                );
+            }, child: Text("Ver registro completo"))
           ],
         ),
       ),
