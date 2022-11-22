@@ -71,9 +71,16 @@ class _PostContentState extends State<PostContent> {
                       value: 1,
                       child: Row(
                         children: [
-                          Icon(Icons.edit, color: Theme.of(context).textTheme.headline6.color),
+                          Icon(Icons.edit,
+                              color:
+                                  Theme.of(context).textTheme.headline6.color),
                           SizedBox(width: 10),
-                          Text("Editar", style: TextStyle(color: Theme.of(context).textTheme.headline6.color))
+                          Text("Editar",
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .color))
                         ],
                       ),
                     ),
@@ -82,9 +89,18 @@ class _PostContentState extends State<PostContent> {
                       value: 2,
                       child: Row(
                         children: [
-                          Icon(Icons.delete,color: Theme.of(context).textTheme.headline6.color),
+                          Icon(Icons.delete,
+                              color:
+                                  Theme.of(context).textTheme.headline6.color),
                           SizedBox(width: 10),
-                          Text("Eliminar", style: TextStyle(color: Theme.of(context).textTheme.headline6.color),)
+                          Text(
+                            "Eliminar",
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .color),
+                          )
                         ],
                       ),
                     ),
@@ -124,9 +140,7 @@ class _PostContentState extends State<PostContent> {
             children: <Widget>[
               SizedBox(height: 60),
               CircleAvatar(
-                backgroundImage: AssetImage(
-                  "assets/images/profile.jpeg",
-                ),
+                backgroundImage: NetworkImage("${widget.user.avatarURL}"),
                 radius: 50,
               ),
               SizedBox(height: 10),

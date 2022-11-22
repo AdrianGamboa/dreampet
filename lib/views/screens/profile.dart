@@ -101,7 +101,8 @@ class _ProfileState extends State<Profile> {
       child: Stack(alignment: Alignment.topCenter, children: [
         Padding(
           padding: const EdgeInsets.only(top: 50),
-          child: Card(
+          child: Card(            
+            elevation: 3,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,28 +114,29 @@ class _ProfileState extends State<Profile> {
                   child: AutoSizeText(data['name'] + ' ' + data['lastName'],
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
+                          fontSize: 26, fontWeight: FontWeight.bold)),
+                ),
+                Container(
+                  width: 300,
+                  margin: const EdgeInsets.only(top: 15),
+                  child: AutoSizeText(data['email'],
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).textTheme.headline6.color,
+                          fontWeight: FontWeight.w500)),
                 ),
                 Container(
                   width: 300,
                   margin: const EdgeInsets.only(top: 5),
-                  child: AutoSizeText(data['email'],
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 16,
-                          color: Color(0xff707070),
-                          fontWeight: FontWeight.w500)),
-                ),
-                Container(
-                  width: 300,
                   child: AutoSizeText('Teléfono: ' + data['phone'],
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 16,
-                          color: Color(0xff707070),
+                          color: Theme.of(context).textTheme.headline6.color,
                           fontWeight: FontWeight.w500)),
                 ),
-                SizedBox(height: 50),
+                SizedBox(height: 40),
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: ElevatedButton(

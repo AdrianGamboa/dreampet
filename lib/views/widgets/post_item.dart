@@ -6,10 +6,9 @@ import 'package:social_app_ui/models/user.dart';
 import '../screens/post_content.dart';
 
 class PostItem extends StatefulWidget {
-  
   final String dp;
   final List<String> images;
-  
+
   final User user;
   final Post post;
   final int postType;
@@ -38,9 +37,7 @@ class _PostItemState extends State<PostItem> {
           children: <Widget>[
             ListTile(
               leading: CircleAvatar(
-                backgroundImage: AssetImage(
-                  "${widget.dp}",
-                ),
+                backgroundImage: NetworkImage("${widget.user.avatarURL}"),
               ),
               contentPadding: EdgeInsets.all(0),
               title: Column(

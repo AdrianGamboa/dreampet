@@ -58,7 +58,7 @@ class _IntroductionScreenPageState extends State<IntroductionScreenPage> {
         // # 1
         PageViewModel(
           title: "¡Firulais te da la bienvenida!",
-          body: "¡Bienvenido a Dreampet!",
+          body: "¡Bienvenido a DreamPet!",
           image: _buildImage('Intro1.png', 250),
           decoration: pageDecoration,
         ),
