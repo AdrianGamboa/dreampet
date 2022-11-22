@@ -32,8 +32,7 @@ class LostPostDB {
   static update(Post post) async {
     try {
       var data =
-          await MongoDatabase.lostPostsCollection.findOne({"_id": post.id});
-      data["images"] = post.images;
+          await MongoDatabase.lostPostsCollection.findOne({"_id": post.id});      
       data["title"] = post.title;
       data["description"] = post.description;
       data["lastDate"] = post.publishedDate;

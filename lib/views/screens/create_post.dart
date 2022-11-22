@@ -14,8 +14,10 @@ import '../../util/view_image_handler.dart';
 
 class CreatePost extends StatefulWidget {
   final int postType;
+  final Post post;
 
-  const CreatePost({Key key, this.postType}) : super(key: key);
+  const CreatePost({Key key, @required this.postType, this.post})
+      : super(key: key);
 
   @override
   State<CreatePost> createState() => _CreatePostState();
@@ -31,6 +33,11 @@ class _CreatePostState extends State<CreatePost> {
   @override
   void initState() {
     super.initState();
+
+    if (widget.post != null) {
+      _titleField.text = widget.post.title;
+      _contentField.text = widget.post.description;      
+    }
   }
 
   @override
@@ -69,8 +76,8 @@ class _CreatePostState extends State<CreatePost> {
                 IconButton(
                   icon: Icon(Icons.check),
                   onPressed: () {
-                    //Publicar post
-                    insertPost();
+                    //Insertar/Editar post
+                    widget.post == null ? insertPost() : updatePost();
                   },
                 )
               ],
@@ -205,6 +212,7 @@ class _CreatePostState extends State<CreatePost> {
                   Divider(
                     thickness: 1,
                   ),
+                  widget.post == null ?
                   Row(
                     children: [
                       IconButton(
@@ -228,10 +236,10 @@ class _CreatePostState extends State<CreatePost> {
                         },
                       ),
                     ],
-                  ),
+                  ): Container()
                 ],
               ),
-            ),
+            )
           ),
         ),
       ),
@@ -319,6 +327,45 @@ class _CreatePostState extends State<CreatePost> {
         } else if (widget.postType == 1) {
           await LostPostDB.insert(post);
         }
+        Navigator.of(context).pop();
+      } catch (e) {
+        _loadindicador = false;
+        if (e == ("Internet error")) {
+          showAlertDialog(context, 'Problema de conexión',
+              'Compruebe si existe conexión a internet e inténtale más tarde.');
+        } else {
+          showAlertDialog(context, 'Problema con el servidor',
+              'Es posible que alguno de los servicios no esté funcionando correctamente. Recomendamos que vuelva a intentarlo más tarde.');
+        }
+        setState(() {});
+      }
+    }
+  }
+
+  updatePost() async {
+    if (_titleField.text.isEmpty ||
+        _contentField.text.isEmpty ) {
+      showInSnackBar(
+          'Es necesario establecer el título y contenido de la publicación.');
+    } else {
+      try {
+        _loadindicador = true;
+        setState(() {});
+        var id = widget.post.id;
+
+        final post = Post(
+            id: id,            
+            title: _titleField.text,
+            description: _contentField.text,
+            publishedDate: DateTime.now());
+
+        if (widget.postType == 0) {
+          await AdoptionPostDB.update(post);
+        } else if (widget.postType == 1) {
+          await LostPostDB.update(post);
+        }
+
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
       } catch (e) {
         _loadindicador = false;

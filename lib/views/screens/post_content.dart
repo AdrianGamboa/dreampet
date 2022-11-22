@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:social_app_ui/util/global.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'dart:io' show File, Platform;
 
+import '../../models/post.dart';
+import '../../models/user.dart';
+import '../../services/adoptionPostService.dart';
+import '../../services/lostPostService.dart';
 import '../../util/const.dart';
 import '../../util/view_image_handler.dart';
+import 'create_post.dart';
 
 class PostContent extends StatefulWidget {
   final String profileImg;
-  final String name;
   final List<String> images;
-  final String description;
-  final String title;
-  final String phone;
 
-  PostContent(
-      {Key key,
-      this.profileImg,
-      @required this.name,
-      @required this.images,
-      @required this.description,
-      @required this.phone,
-      @required this.title})
-      : super(key: key);
+  final User user;
+  final Post post;
+  final int postType;
+
+  PostContent({
+    Key key,
+    this.profileImg,
+    @required this.images,
+    @required this.user,
+    @required this.post,
+    @required this.postType,
+  }) : super(key: key);
 
   @override
   _PostContentState createState() => _PostContentState();
@@ -56,6 +61,58 @@ class _PostContentState extends State<PostContent> {
                     height: 120,
                   )),
         centerTitle: true,
+        actions: <Widget>[
+          widget.user.uid == userFire.uid
+              ? PopupMenuButton<int>(
+                  tooltip: 'Acciones',
+                  itemBuilder: (context) => [
+                    // # 1
+                    PopupMenuItem(
+                      value: 1,
+                      child: Row(
+                        children: [
+                          Icon(Icons.edit, color: Theme.of(context).textTheme.headline6.color),
+                          SizedBox(width: 10),
+                          Text("Editar", style: TextStyle(color: Theme.of(context).textTheme.headline6.color))
+                        ],
+                      ),
+                    ),
+                    // # 2
+                    PopupMenuItem(
+                      value: 2,
+                      child: Row(
+                        children: [
+                          Icon(Icons.delete,color: Theme.of(context).textTheme.headline6.color),
+                          SizedBox(width: 10),
+                          Text("Eliminar", style: TextStyle(color: Theme.of(context).textTheme.headline6.color),)
+                        ],
+                      ),
+                    ),
+                  ],
+                  color: Theme.of(context).primaryColor,
+                  elevation: 2,
+                  onSelected: (value) async {
+                    if (value == 1) {
+                      Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return CreatePost(
+                                postType: widget.postType, post: widget.post);
+                          },
+                        ),
+                      ).then((value) => setState(() {}));
+                    } else if (value == 2) {
+                      if (widget.postType == 0) {
+                        await AdoptionPostDB.delete(widget.post);
+                      } else if (widget.postType == 0) {
+                        await LostPostDB.delete(widget.post);
+                      }
+                      Navigator.of(context).pop();
+                    }
+                  },
+                )
+              : Container(),
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -74,7 +131,7 @@ class _PostContentState extends State<PostContent> {
               ),
               SizedBox(height: 10),
               Text(
-                widget.name,
+                widget.user.name + " " + widget.user.lastName,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 22,
@@ -82,12 +139,12 @@ class _PostContentState extends State<PostContent> {
               ),
               SizedBox(height: 5),
               Text(
-                widget.title,
+                widget.post.title,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 10),
-              Text('Contacto: ' + widget.phone),
+              Text('Contacto: ' + widget.user.phone),
               SizedBox(height: 10),
               Row(
                 //Contact info
@@ -109,7 +166,7 @@ class _PostContentState extends State<PostContent> {
                           fontWeight: FontWeight.normal, color: Colors.white),
                     ),
                     onPressed: () {
-                      phoneCall(widget.phone);
+                      phoneCall(widget.user.phone);
                     },
                   ),
                   SizedBox(width: 10),
@@ -129,7 +186,7 @@ class _PostContentState extends State<PostContent> {
                           fontWeight: FontWeight.normal, color: Colors.white),
                     ),
                     onPressed: () {
-                      openWhatsapp(widget.phone);
+                      openWhatsapp(widget.user.phone);
                     },
                   ),
                 ],
@@ -138,7 +195,7 @@ class _PostContentState extends State<PostContent> {
               Padding(
                   padding: EdgeInsets.only(left: 20, right: 20),
                   child: Text(
-                    widget.description,
+                    widget.post.description,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontWeight: FontWeight.normal,

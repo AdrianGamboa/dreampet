@@ -1,13 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:social_app_ui/models/user.dart';
 import 'package:social_app_ui/views/screens/create_post.dart';
 import 'package:social_app_ui/views/widgets/post_item.dart';
 import '../../services/AuthenticationService.dart';
+import '../../models/post.dart';
 import '../../services/adoptionPostService.dart';
 import '../../services/lostPostService.dart';
 import '../../util/const.dart';
 import 'package:intl/intl.dart';
-
 import '../../util/router.dart';
 import 'auth/login.dart';
 import 'introduction_screen.dart';
@@ -152,19 +153,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         }
       });
 
+  refresh() {
+    setState(() {});
+  }
+  
   Widget buildPost(list) => ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 20),
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           return PostItem(
             images: list[index][0]['images'].cast<String>(),
-            name: list[index][1]['name'] + " " + list[index][1]['lastName'],
             dp: "assets/images/cm${Random().nextInt(10)}.jpeg",
-            time: DateFormat.yMMMd()
-                .format(list[index][0]['publishedDate'].toLocal()),
-            description: list[index][0]['description'],
-            phone: list[index][1]['phone'],
-            title: list[index][0]['title'],
+
+            notifyParent: refresh,
+            user: User.fromMap(list[index][1]),
+            post: Post.fromMap(list[index][0]),
+            postType: tabIndx,
           );
         },
       );

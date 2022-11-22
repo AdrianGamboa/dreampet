@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:social_app_ui/models/post.dart';
+import 'package:social_app_ui/models/user.dart';
 
 import '../screens/post_content.dart';
 
 class PostItem extends StatefulWidget {
+  
   final String dp;
-  final String name;
-  final String time;
   final List<String> images;
-  final String description;
-  final String title;
-  final String phone;
+  
+  final User user;
+  final Post post;
+  final int postType;
+  final Function() notifyParent;
 
-  PostItem(
-      {Key key,
-      @required this.dp,
-      @required this.name,
-      @required this.time,
-      @required this.images,
-      @required this.description,
-      @required this.phone,
-      @required this.title})
-      : super(key: key);
+  PostItem({
+    Key key,
+    @required this.dp,
+    @required this.images,
+    @required this.user,
+    @required this.post,
+    @required this.postType,
+    @required this.notifyParent,
+  }) : super(key: key);
   @override
   _PostItemState createState() => _PostItemState();
 }
@@ -45,7 +48,7 @@ class _PostItemState extends State<PostItem> {
                   Row(children: [
                     Flexible(
                       child: Text(
-                        "${widget.name}",
+                        "${widget.user.name + " " + widget.user.lastName}",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -58,7 +61,7 @@ class _PostItemState extends State<PostItem> {
                     children: [
                       Flexible(
                         child: Text(
-                          "${widget.title}",
+                          "${widget.post.title}",
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -71,7 +74,7 @@ class _PostItemState extends State<PostItem> {
                 ],
               ),
               trailing: Text(
-                "${widget.time}",
+                "${DateFormat.yMMMd().format(widget.post.publishedDate.toLocal())}",
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 14,
@@ -88,7 +91,7 @@ class _PostItemState extends State<PostItem> {
               margin: EdgeInsets.only(top: 5),
               alignment: Alignment.centerLeft,
               child: Text(
-                "${widget.description}",
+                "${widget.post.description}",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -104,14 +107,14 @@ class _PostItemState extends State<PostItem> {
             MaterialPageRoute(
               builder: (BuildContext context) {
                 return PostContent(
-                    name: widget.name,
-                    images: widget.images,
-                    title: widget.title,
-                    phone: widget.phone,
-                    description: widget.description);
+                  images: widget.images,
+                  user: widget.user,
+                  post: widget.post,
+                  postType: widget.postType,
+                );
               },
             ),
-          );
+          ).then((value) => widget.notifyParent());
         },
       ),
     );
