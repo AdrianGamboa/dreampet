@@ -44,6 +44,8 @@ class _VeterinaryPetState extends State<VeterinaryPet> {
       },
       child: Scaffold(
         appBar: AppBar(
+          iconTheme:
+            IconThemeData(color: Theme.of(context).textTheme.headline6.color),
           backgroundColor: Theme.of(context).primaryColor,
           title: Container(
               margin: EdgeInsets.only(top: 15, bottom: 10),
@@ -147,57 +149,28 @@ class _VeterinaryPetState extends State<VeterinaryPet> {
         itemCount: list.length,
         itemBuilder: (BuildContext context, int index) {
           Map notif = list[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListTile(
-              contentPadding: EdgeInsets.all(8.0),
-              title: Container(
-                  child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(width: 120, child: Text('Consulta: ')),
-                          SizedBox(width: 120, child: Text(notif['consulta'])),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          SizedBox(width: 120, child: Text("Fecha: ")),
-                          SizedBox(width: 120, child: Text(notif['fecha'])),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  )
-                ],
-              )),
-              subtitle: Container(
-                  child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(width: 120, child: Text("Lugar: ")),
-                          SizedBox(width: 120, child: Text(notif['lugar'])),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 20,
-                  )
-                ],
-              )),
-              trailing: Column(
-                children: [
-                  SizedBox(
-                    height: 35,
-                    child: IconButton(
+          return ListTile(              
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(width: 120, child: Text('Consulta: ')),
+                    SizedBox(width: 120, child: Text(notif['consulta'])),
+                    SizedBox(height: 10),
+                    SizedBox(width: 120, child: Text('Lugar: ')),
+                    SizedBox(width: 120, child: Text(notif['lugar']))
+                  ],
+                ),
+                Column(
+                  children: [
+                    SizedBox(width: 120, child: Text("Fecha: ")),
+                    SizedBox(width: 120, child: Text(notif['fecha'])),
+                  ],
+                ),
+                Column(
+                  children: [
+                    IconButton(
                       iconSize: 20,
                       onPressed: () {
                         Navigator.of(context).push(
@@ -212,15 +185,12 @@ class _VeterinaryPetState extends State<VeterinaryPet> {
                         ).then((value) {
                           setState(() {});
                         });
-                        ;
                       },
                       icon: Icon(
                         Icons.edit,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    child: IconButton(
+                    IconButton(
                       onPressed: () {
                         VeterinaryDB.delete(convertToVeterinary(notif));
                         setState(() {});
@@ -229,10 +199,11 @@ class _VeterinaryPetState extends State<VeterinaryPet> {
                         Icons.delete,
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
+            trailing: null,
           );
         },
       );
