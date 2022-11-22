@@ -38,6 +38,7 @@ class UserDB {
       u["name"] = user.name;
       u["lastName"] = user.lastName;
       u["email"] = user.email;
+      u["avatarURL"] = user.avatarURL;
       u["uid"] = user.uid;
       await MongoDatabase.usersCollection.save(u);
     } catch (e) {
@@ -61,6 +62,7 @@ class UserDB {
           lastName: lastName,
           email: email,
           phone: phone,
+          avatarURL: defaultAvatarURL,
           uid: uid);
       await insert(user);
     } catch (e) {

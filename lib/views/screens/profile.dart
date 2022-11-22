@@ -1,8 +1,16 @@
-import 'dart:math';
-
+import 'dart:io';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:social_app_ui/util/data.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:social_app_ui/views/screens/auth/login.dart';
+import '../../models/user.dart';
+import '../../services/AuthenticationService.dart';
+import '../../services/userService.dart';
+import '../../util/alerts.dart';
+import '../../util/connection.dart';
 import '../../util/const.dart';
+import '../../util/router.dart';
 import 'introduction_screen.dart';
 
 class Profile extends StatefulWidget {
@@ -11,150 +19,272 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  static Random random = Random();
+  Future<Map<String, dynamic>> getUser;
+  User user;
+  File _imageFile;
+  bool _loadindicador = false;
+  @override
+  void initState() {
+    _getUser();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Container(
-            margin: EdgeInsets.only(top: 15, bottom: 10),
-            child: MediaQuery.of(context).platformBrightness == Brightness.dark
-                ? Image.asset(
-                    '${Constants.logoWhite}',
-                    height: 120,
-                  )
-                : Image.asset(
-                    '${Constants.logoBlack}',
-                    height: 120,
-                  )),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.help,
+    return WillPopScope(
+      onWillPop: () async => !_loadindicador,
+      child: IgnorePointer(
+        ignoring: _loadindicador,
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              title: Container(
+                  margin: EdgeInsets.only(top: 15, bottom: 10),
+                  child: MediaQuery.of(context).platformBrightness ==
+                          Brightness.dark
+                      ? Image.asset(
+                          '${Constants.logoWhite}',
+                          height: 120,
+                        )
+                      : Image.asset(
+                          '${Constants.logoBlack}',
+                          height: 120,
+                        )),
+              centerTitle: true,
+              actions: <Widget>[
+                PopupMenuButton<String>(
+                  onSelected: handleClick,
+                  icon: Icon(
+                    Icons.filter_list,
+                  ),
+                  itemBuilder: (BuildContext context) {
+                    return {'Prólogo', 'Cerrar sesión'}.map((String choice) {
+                      return PopupMenuItem<String>(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  },
+                ),
+              ],
             ),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => IntroductionScreenPage(intro: false)));
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 60),
-              CircleAvatar(
-                backgroundImage: AssetImage(
-                  "assets/images/cm${random.nextInt(10)}.jpeg",
-                ),
-                radius: 50,
-              ),
-              SizedBox(height: 10),
-              Text(
-                names[random.nextInt(10)],
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-              ),
-              SizedBox(height: 3),
-              Text(
-                "Status should be here",
-                style: TextStyle(),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        textStyle: TextStyle(
-                      color: Colors.grey,
-                    )),
-                    child: Icon(
-                      Icons.message,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {},
+            body: _loadindicador
+                ? LinearProgressIndicator()
+                : SingleChildScrollView(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10, vertical: 150),
+                    child: ReRunnableFutureBuilder(getUser,
+                        getUserInformation: getUserInformation),
                   ),
-                  SizedBox(width: 10),
-                  TextButton(
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
-                    style: TextButton.styleFrom(
-                        textStyle: TextStyle(
-                      color: Theme.of(context).accentColor,
-                    )),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-              SizedBox(height: 40),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _buildCategory("Posts"),
-                    _buildCategory("Friends"),
-                    _buildCategory("Groups"),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                primary: false,
-                padding: EdgeInsets.all(5),
-                itemCount: 15,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 200 / 200,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Image.asset(
-                      "assets/images/cm${random.nextInt(10)}.jpeg",
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                },
-              ),
-            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildCategory(String title) {
-    return Column(
-      children: <Widget>[
-        Text(
-          random.nextInt(10000).toString(),
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
+  _getUser() async {
+    try {
+      setState(() {
+        getUser = UserDB.getCurrentUser();
+      });
+      dynamic u = await getUser;
+      user = User.fromMap(u);
+    } catch (e) {}
+  }
+
+  List<Widget> getUserInformation(data, context) {
+    List<Widget> userData = [];
+    userData.add(Container(
+      width: MediaQuery.of(context).size.width,
+      child: Stack(alignment: Alignment.topCenter, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 50),
+          child: Card(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 50),
+                Container(
+                  width: 300,
+                  margin: const EdgeInsets.only(top: 20),
+                  child: AutoSizeText(data['name'] + ' ' + data['lastName'],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold)),
+                ),
+                Container(
+                  width: 300,
+                  margin: const EdgeInsets.only(top: 5),
+                  child: AutoSizeText(data['email'],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff707070),
+                          fontWeight: FontWeight.w500)),
+                ),
+                Container(
+                  width: 300,
+                  child: AutoSizeText('Teléfono: ' + data['phone'],
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Color(0xff707070),
+                          fontWeight: FontWeight.w500)),
+                ),
+                SizedBox(height: 50),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      AuthenticationService()
+                          .signOut(context)
+                          .then((value) =>
+                              Navigate.pushPageReplacement(context, Login()))
+                          .onError((error, stackTrace) => setState(() {}));
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Icons.logout),
+                        SizedBox(width: 5),
+                        Text('Cerrar Sesión',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ))
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
-        SizedBox(height: 4),
-        Text(
-          title,
-          style: TextStyle(),
+        Positioned(
+          top: 0,
+          child: GestureDetector(
+            onTap: () => _getFromGallery(),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(data['avatarURL']),
+              radius: 50,
+            ),
+          ),
         ),
-      ],
+      ]),
+    ));
+
+    return userData;
+  }
+
+  /// Get from gallery
+  _getFromGallery() async {
+    XFile pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 15,
     );
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+        updateUser();
+      });
+    }
+  }
+
+  Future<String> _uploadToFirebase(String pathName) async {
+    if (_imageFile != null) {
+      try {
+        if (await hasNetwork()) {
+          final uploadTask =
+              FirebaseStorage.instance.ref().child('users/$pathName');
+
+          await uploadTask.putFile(_imageFile);
+          String url = await uploadTask.getDownloadURL();
+          return url;
+        } else {
+          throw ('Internet error');
+        }
+      } catch (e) {
+        return Future.error(e);
+      }
+    }
+    return null;
+  }
+
+  updateUser() async {
+    try {
+      _loadindicador = true;
+      final userObject = User(
+          id: user.id,
+          name: user.name,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone,
+          avatarURL: await _uploadToFirebase(user.id.$oid),
+          uid: user.uid);
+
+      await UserDB.update(userObject);
+      _loadindicador = false;
+      await _getUser();
+    } catch (e) {
+      _loadindicador = false;
+      if (e == ("Internet error")) {
+        showAlertDialog(context, 'Problema de conexión',
+            'Compruebe si existe conexión a internet e inténtale más tarde.');
+      } else {
+        showAlertDialog(context, 'Problema con el servidor',
+            'Es posible que alguno de los servicios no esté funcionando correctamente. Recomendamos que vuelva a intentarlo más tarde.');
+      }
+      setState(() {});
+    }
+  }
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Prólogo':
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => IntroductionScreenPage(intro: false)));
+        break;
+      case 'Cerrar sesión':
+        AuthenticationService()
+            .signOut(context)
+            .then((value) => Navigate.pushPageReplacement(context, Login()))
+            .onError((error, stackTrace) => setState(() {}));
+        break;
+    }
+  }
+}
+
+class ReRunnableFutureBuilder extends StatelessWidget {
+  final Future<Map<String, dynamic>> _future;
+
+  const ReRunnableFutureBuilder(this._future,
+      {Key key, this.getUserInformation})
+      : super(key: key);
+
+  final Function getUserInformation;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(
+                child: Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: CircularProgressIndicator()));
+          }
+          if (snapshot.hasError) {
+            return const Text("Error al extraer la información");
+          }
+
+          return Column(
+            children: getUserInformation(snapshot.data, context),
+          );
+        });
   }
 }

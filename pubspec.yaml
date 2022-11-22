@@ -34,13 +34,13 @@ dependencies:
   shared_preferences: ^2.0.15
   flutter_native_splash: ^2.2.15
   url_launcher: ^6.1.6
+  auto_size_text: ^3.0.0
 
 flutter_native_splash:
   image: assets/images/logos/DreampetBlack.png
   color: "#FFFFFF"
   image_dark: assets/images/logos/DreampetWhite.png
   color_dark: "#1F1F1F"
-
 
 dev_dependencies:
   flutter_test:

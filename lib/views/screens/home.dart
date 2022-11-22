@@ -2,10 +2,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:social_app_ui/views/screens/create_post.dart';
 import 'package:social_app_ui/views/widgets/post_item.dart';
+import '../../services/AuthenticationService.dart';
 import '../../services/adoptionPostService.dart';
 import '../../services/lostPostService.dart';
 import '../../util/const.dart';
 import 'package:intl/intl.dart';
+
+import '../../util/router.dart';
+import 'auth/login.dart';
+import 'introduction_screen.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -43,6 +48,22 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                     '${Constants.logoBlack}',
                     height: 120,
                   )),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: handleClick,
+            icon: Icon(
+              Icons.filter_list,
+            ),
+            itemBuilder: (BuildContext context) {
+              return {'Prólogo', 'Cerrar sesión'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: choice,
+                  child: Text(choice),
+                );
+              }).toList();
+            },
+          ),
+        ],
         centerTitle: true,
         bottom: TabBar(
           controller: _tabController,
@@ -89,6 +110,21 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         },
       ),
     );
+  }
+
+  void handleClick(String value) {
+    switch (value) {
+      case 'Prólogo':
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => IntroductionScreenPage(intro: false)));
+        break;
+      case 'Cerrar sesión':
+        AuthenticationService()
+            .signOut(context)
+            .then((value) => Navigate.pushPageReplacement(context, Login()))
+            .onError((error, stackTrace) => setState(() {}));
+        break;
+    }
   }
 
   Widget postFutureBuilder(_future, list, indx) => FutureBuilder(
