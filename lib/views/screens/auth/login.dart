@@ -52,8 +52,8 @@ class _LoginState extends State<Login> {
       setState(() {});
       showInSnackBar('Por favor solucione los errores.');
     } else {
-      User user = await _auth.createNewUser(
-          name.trim(), lastName.trim(), email.trim(), phone.trim(), password.trim(), context);
+      User user = await _auth.createNewUser(name.trim(), lastName.trim(),
+          email.trim(), phone.trim(), password.trim(), context);
 
       if (user != null) {
         formMode = FormMode.LOGIN;
@@ -254,7 +254,7 @@ class _LoginState extends State<Login> {
           nextFocusNode: phoneFN,
         ).fadeInList(1, false),
         SizedBox(height: 20.0),
-         Visibility(
+        Visibility(
           visible: formMode == FormMode.REGISTER,
           child: Column(
             children: [
@@ -296,6 +296,49 @@ class _LoginState extends State<Login> {
     );
   }
 
+  Future resetPassword() async {
+    FormState form = formKey.currentState;
+    form.save();
+    if (!form.validate()) {
+      validate = true;
+      setState(() {});
+      showInSnackBar('Por favor solucione los errores.');
+    } else {
+      try {
+        loading = true;
+        setState(() {});
+        await FirebaseAuth.instance.sendPasswordResetEmail(email: email.trim());
+        showInSnackBar('Solicitud de cambio de contraseña.\n'
+            'Hemos enviado un correo electrónico a $email en donde podrás modificar tu contraseña por medio de un enlace adjunto.');
+        loading = false;
+        setState(() {});
+
+      } on FirebaseAuthException catch (e) {
+        String message = '';
+        switch (e.code) {
+          case 'user-not-found':
+            message =
+                'No existe una cuenta de usuario enlazada a la dirección de correo electrónico: $email';
+            break;
+          case 'invalid-email':
+            message = 'El correo electrónico proporcionado es inválido.';
+            break;
+          case 'too-many-requests':
+            message =
+                'Hemos bloqueado todas las solicitudes de este dispositivo debido a que se detecto actividad inusual. Vuelva a intentarlo más tarde.';
+            break;
+
+          default:
+            message = e.message;
+        }
+        showInSnackBar('Error.\n' + message);
+
+        loading = false;
+        setState(() {});
+      }
+    }
+  }
+
   buildButton() {
     return loading
         ? Center(child: CircularProgressIndicator())
@@ -303,8 +346,16 @@ class _LoginState extends State<Login> {
             color: MediaQuery.of(context).platformBrightness == Brightness.dark
                 ? Theme.of(context).primaryColor
                 : Colors.blue,
-            label: formMode == FormMode.LOGIN ? "Iniciar sesión" : "Registrarse",
-            onPressed: () => formMode == FormMode.LOGIN ? login() : register(),
+            label: formMode == FormMode.LOGIN
+                ? "Iniciar sesión"
+                : formMode == FormMode.REGISTER
+                    ? "Registrarse"
+                    : "Restablecer contraseña",
+            onPressed: () => formMode == FormMode.LOGIN
+                ? login()
+                : formMode == FormMode.REGISTER
+                    ? register()
+                    : resetPassword(),
           ).fadeInList(4, false);
   }
 }
