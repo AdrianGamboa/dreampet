@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:social_app_ui/views/widgets/icon_badge.dart';
 import 'package:social_app_ui/views/screens/chat/chats.dart';
-import 'package:social_app_ui/views/screens/friends.dart';
 import 'package:social_app_ui/views/screens/home.dart';
-import 'package:social_app_ui/views/screens/notifications.dart';
 import 'package:social_app_ui/views/screens/profile.dart';
 
 class MainScreen extends StatefulWidget {
@@ -13,7 +10,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   PageController _pageController;
-  int _page = 2;
+  int _page = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +21,7 @@ class _MainScreenState extends State<MainScreen> {
         onPageChanged: onPageChanged,
         children: <Widget>[
           Chats(),
-          Friends(),
           Home(),
-          Notifications(),
           Profile(),
         ],
       ),
@@ -47,13 +42,7 @@ class _MainScreenState extends State<MainScreen> {
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.message,
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.group,
+                Icons.pets,
               ),
               label: '',
             ),
@@ -61,10 +50,6 @@ class _MainScreenState extends State<MainScreen> {
               icon: Icon(
                 Icons.home,
               ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: IconBadge(icon: Icons.notifications),
               label: '',
             ),
             BottomNavigationBarItem(
@@ -86,7 +71,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: 2);
+    _pageController = PageController(initialPage: 1);
   }
 
   @override
